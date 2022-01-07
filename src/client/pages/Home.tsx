@@ -149,7 +149,7 @@ const Home: React.FC<Props> = (props) => {
           >
             Dinner 
           </Typography.Typography>
-          <Editable.MenuDisplay items={store.defaultState.content.menu.menu}>
+          <Composed.Menu items={store.defaultState.content.menu.menu}>
             {" "}
             <Layout.Flex yAlign="center" xAlign="center" width="80%">
               <Typography.Typography
@@ -173,20 +173,20 @@ const Home: React.FC<Props> = (props) => {
                 Menu subject to change
               </Typography.Typography>
             </Layout.Flex>
-          </Editable.MenuDisplay>
+          </Composed.Menu>
         </Layout.Flex>
 
-        <Layout.Flex
+        {/* <Layout.Flex
           id="cocktails"
           margin="2em 0"
           column
           yAlign="center"
           xAlign="center"
         >
-          <Editable.MenuDisplay
+          <Composed.Menu
             items={store.defaultState.content.menu.drinks}
-          ></Editable.MenuDisplay>
-        </Layout.Flex>
+          ></Composed.Menu>
+        </Layout.Flex> */}
         {/* <Typography.Typography
             color="textTertiary"
             variant="h3"

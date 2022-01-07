@@ -805,6 +805,7 @@ class Store {
   };
   user = { roles: [""] };
   content = {};
+  mode: 'view' | 'edit' = 'edit'
 
   constructor() {
     makeAutoObservable(this);

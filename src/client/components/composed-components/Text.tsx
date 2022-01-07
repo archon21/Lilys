@@ -125,7 +125,7 @@ const Text: React.FC<TextProps> = (props) => {
     setMounted(true);
   }, []);
 
-  console.log(contentObjects, "PENI");
+
 
   return mounted ? (
     Boolean(store.user?.roles?.includes("admin")) ? (
