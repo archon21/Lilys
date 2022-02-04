@@ -11,7 +11,7 @@ const Authentication = {
     const { email, password } = request.body;
     // const user = await User.findOne({ email });
     const user = {};
-    if (email === "emily@lilysbar.com" && password === "f") {
+    if (email === "emily@lilysbar.com" && password === "Paris1234@") {
      
         
       return response.status(200).send({ mode: "edit" });
