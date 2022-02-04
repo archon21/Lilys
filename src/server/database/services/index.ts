@@ -1,5 +1,11 @@
 import Content from './content'
+import Draft from './draft'
+import Menu from './menu'
+import Authentication from './authentication'
 
 export default {
-    Content
+    Content,
+    Menu, 
+    Draft, 
+    Authentication
 }

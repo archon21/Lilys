@@ -25,15 +25,17 @@ const Vessel = styled.div<Props>`
   display: flex;
   flex-direction: ${(props) => (props.column ? "column" : "row")};
   flex-wrap: ${(props) => (props.noWrap ? "nowrap" : "wrap")};
-
+  background: ${(props) =>
+    props.background
+      ? Styles.Colors[props.background]
+      : Styles.Colors.transparent};
   ${(props) => Styles.Defaults.Spacing({ props })}
   ${(props) => Styles.Defaults.Dimensions({ props })}
   ${(props) => props.alignment?.map((str) => str)}
 `;
 
 const Flex: React.FC<Props> = (props) => {
-
-  const sectionRef = useRef(null)
+  const sectionRef = useRef(null);
 
   const alignment = getFlexAlignment({
     column: props.column,

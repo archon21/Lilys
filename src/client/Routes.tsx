@@ -14,8 +14,8 @@ import {
 } from 'react-router-dom';
 
 import * as Pages from './pages';
-import * as htmlRoutesConfig from '../server/routes/html';
-import { Interfaces } from '../site-config';
+
+import { Interfaces, siteConfig } from '../site-config';
 import { Location, History } from 'history';
 
 interface Props extends RouteComponentProps {
@@ -28,7 +28,11 @@ const createRoute = (htmlRoutesConfig: object, defaultState: object) => {
   const clientRoutes: Array<ReactElement> = Object.entries(
     htmlRoutesConfig
   ).map(([key, { component, url }]: [string, Interfaces.Route]) => {
+    console.log(component, url);
+    
     const ComponentToRender = Pages[component];
+    console.log(ComponentToRender);
+    
     return (
       <Route
         key={key}
@@ -43,7 +47,7 @@ const createRoute = (htmlRoutesConfig: object, defaultState: object) => {
 
 const Routes: React.FC<Props> = ({ defaultState, location, history }) => {
   const [clientRoutes, setClientRoutes] = useState<Array<ReactElement>>(
-    createRoute(htmlRoutesConfig, defaultState)
+    createRoute(siteConfig.server.htmlRoutes, defaultState)
   );
   const [mounted, setMounted] = useState<boolean>(false);
 

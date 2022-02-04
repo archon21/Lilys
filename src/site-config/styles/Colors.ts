@@ -31,8 +31,10 @@ const Colors = {
   transparent: "transparent",
 
   lightGray: '#999',
-  black: "#333"
+  black: "#333",
+  white: "#fff"
 };
+
 
 Object.entries(Colors).forEach(([colorKey, colorTone]) => {
   Colors[colorKey] = theme("mode", { light: colorTone });

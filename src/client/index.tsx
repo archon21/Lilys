@@ -14,6 +14,7 @@ declare global {
   }
 }
 
+
 ReactDOM.render(
   <BrowserRouter>
     <React.Fragment>

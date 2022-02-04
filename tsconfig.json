@@ -1,4 +1,10 @@
 {
+  "compilerOptions": {
+    "jsx": "react"
+  },
+  "compilerOptions": {
+    "jsx": "react"
+  },
   "extends": "./tsconfig.overrides.json",
   "include": ["./src", "./server"]
 }

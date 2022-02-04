@@ -49,12 +49,12 @@ const _deserialize = ({ type, children }) => {
     case "align-center":
       return <div style={{ textAlign: "center" }}>{children}</div>;
     default:
-      return <span variant="p">{children}</span>;
+      return <span >{children}</span>;
   }
 };
 
 const _recursivelyCreateTextNodes = ({ curr, arr }) => {
-//   console.log(curr, "CURR", arr);
+
   if (Array.isArray(curr)) {
     for (let i = 0; i < curr.length; i++) {
       if(curr[i].children) {
@@ -125,7 +125,7 @@ const Text: React.FC<TextProps> = (props) => {
     setMounted(true);
   }, []);
 
-  console.log(contentObjects, "PENI");
+
 
   return mounted ? (
     Boolean(store.user?.roles?.includes("admin")) ? (

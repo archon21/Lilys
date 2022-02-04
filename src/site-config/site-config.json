@@ -30,6 +30,33 @@
       "connection": {
         "development": "mongodb://localhost:27017/Lily's"
       }
-    }
+    },
+    "htmlRoutes": [
+      {
+        "title": "Home",
+        "url": "/",
+        "component": "Home",
+        "methods": [
+          {
+            "method": "GET",
+            "services": [
+             
+              {
+                "action": "GET",
+                "service": "Menu",
+                "stateName": "menus",
+                "accessorName": "menu"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Admin Login",
+        "url": "/login",
+        "component": "AdminLogin",
+        "methods": [{"method": "GET", "services": []}]
+      }
+    ]
   }
 }

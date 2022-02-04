@@ -5,11 +5,11 @@ import path from "path";
 import { siteConfig } from "../site-config";
 
 import routes from "./routes";
-// import { Database } from "./database";
+import { Database } from "./database";
 
-// Database.once("open", () => {
-//   console.log("Database connected");
-// });
+Database.once("open", () => {
+  console.log("Database connected");
+});
 
 const app = express();
 
