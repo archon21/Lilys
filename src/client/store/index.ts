@@ -853,9 +853,9 @@ class Store {
     const { data } = await axios.post("/api/menu", {
       menus: [
         {
-          name: "drinks",
-          displayName: "Drinks",
-          sections: Object.values(drinkMenu).map((section) => {
+          name: "default",
+          displayName: "Dinner",
+          sections: Object.values(defaultMenu).map((section) => {
             return {
               name: section.name,
               description: section.description,
