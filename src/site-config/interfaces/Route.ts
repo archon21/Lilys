@@ -2,6 +2,7 @@ export interface Service {
   action: string;
   service: string;
   stateName: string;
+  accessorName: string;
 }
 
 export interface Method {

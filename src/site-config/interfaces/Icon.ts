@@ -6,6 +6,8 @@ interface Icon {
   name: string;
   color?: Colors;
   type: "svg" | "icon";
+  padding?:string;
+  margin?: string;
 }
 
 export default Icon;

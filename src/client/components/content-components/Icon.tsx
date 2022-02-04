@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Styles, Interfaces } from "../../../site-config";
+import { Defaults } from "../../../site-config/styles";
 import { SVG } from "../../assets";
 
 const iconSizes = {
@@ -16,6 +17,7 @@ const I = styled.i<Interfaces.Icon>`
     props.size ? iconSizes[props.size] : iconSizes.normal};
   color: ${(props) =>
     props.color ? Styles.Colors[props.color] : Styles.Colors.background};
+  ${(props) => Defaults.Spacing({ props })}
 `;
 
 const Svg = styled.div<any>`
@@ -25,7 +27,7 @@ const Svg = styled.div<any>`
     fill: ${(props) => Styles.Colors[props.color] || Styles.Colors.primary};
     width: ${(props) => iconSizes[props.size] || iconSizes.normal};
     transition: all 300ms ease-in-out;
-    margin: ${(props) => props.margin || 0};
+    ${(props) => Defaults.Spacing({ props })}
   }
 `;
 

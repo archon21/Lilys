@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import store from "../store";
 
@@ -16,6 +16,7 @@ import NavMenu from "../components/Nav/NavMenus";
 import NavLogo from "../components/Nav/NavLogo";
 import DesktopMenu from "../components/Nav/NavMenus/DesktopMenu";
 import Util from "../util";
+import { toJS } from "mobx";
 
 interface DefaultState {
   base: Array<string>;
@@ -27,8 +28,24 @@ interface Props {
 
 const Home: React.FC<Props> = (props) => {
   // const [defaultState, setDefaultState] = useState({});
+  const [pageConfig, setPageConfig] = useState({ mounted: false });
 
-  return (
+  const handleMount = async () => {
+    await store.defaultStateGetter({ htmlRouteAccess: "Home" });
+    
+
+    setPageConfig({ ...pageConfig, mounted: true });
+  };
+
+  useEffect(() => {
+    
+    // if(!store.defaultState?.menus?.default) {
+    handleMount();
+
+    // }
+  }, []);
+
+  return pageConfig.mounted ? (
     <React.Fragment>
       <Layout.WindoW
         id="home"
@@ -38,14 +55,12 @@ const Home: React.FC<Props> = (props) => {
         init
         xAlign="flex-start"
         yAlign="flex-start"
-        column
-      >
+        column>
         <Layout.Flex
           margin="1em 0 0 0"
           column
           xAlign="center"
-          yAlign="flex-start"
-        >
+          yAlign="flex-start">
           <NavLogo></NavLogo>
 
           {store.window.clientWidth >
@@ -61,8 +76,7 @@ const Home: React.FC<Props> = (props) => {
             displayAlign={{ alignSelf: "center" }}
             textAlign="center"
             margin="1em 0 0 0"
-            weight="bold"
-          >
+            weight="bold">
             Lily's is now open and we look forward to seeing you!{" "}
           </Typography.Typography>
           <Typography.Typography
@@ -71,8 +85,7 @@ const Home: React.FC<Props> = (props) => {
             displayAlign={{ alignSelf: "center" }}
             textAlign="center"
             margin="2em 0 0"
-            weight="500"
-          >
+            weight="500">
             Lily's is now open and we look forward to seeing you! Come in to
             enjoy a concise menu of premium steaks, seafood, sandwiches, and
             salads along with a selection of daily specials.
@@ -83,8 +96,7 @@ const Home: React.FC<Props> = (props) => {
             displayAlign={{ alignSelf: "center" }}
             textAlign="center"
             margin="2em 0 0"
-            weight="500"
-          >
+            weight="500">
             The space is intimate with 8 tables in the main dining room, and 5
             tables on the patio. There are 2 high tops on the patio considered
             our bar dining that has a high level of energy from the bar situated
@@ -96,8 +108,7 @@ const Home: React.FC<Props> = (props) => {
             displayAlign={{ alignSelf: "center" }}
             textAlign="center"
             margin="2em 0 0"
-            weight="500"
-          >
+            weight="500">
             Friendly, knowledgeable bartenders craft classic cocktails alongside
             a chef chosen wine and beer selection to complement the menu. We
             recommend making reservations and walk-ins are always welcome.
@@ -121,8 +132,7 @@ const Home: React.FC<Props> = (props) => {
 
                 global.window.scroll({ top: scrollTo, behavior: "smooth" });
               }
-            }}
-          >
+            }}>
             {" "}
             Dining Guidelines
           </Element.Buttons.Button>
@@ -132,24 +142,14 @@ const Home: React.FC<Props> = (props) => {
         xAlign="center"
         yAlign="center"
         column
-        background="backgroundSecondary"
-      >
+        background="backgroundSecondary">
         <Layout.Flex
           id="menu"
           margin="2em 0"
           column
           yAlign="center"
-          xAlign="center"
-        >
-          <Typography.Typography
-            color="textTertiary"
-            variant="h3"
-            textAlign="center"
-            margin="0 0 1em"
-          >
-            Dinner 
-          </Typography.Typography>
-          <Composed.Menu items={store.defaultState.content.menu.menu}>
+          xAlign="center">
+          <Composed.Menu id="default">
             {" "}
             <Layout.Flex yAlign="center" xAlign="center" width="80%">
               <Typography.Typography
@@ -157,8 +157,7 @@ const Home: React.FC<Props> = (props) => {
                 variant="span"
                 displayAlign={{ alignSelf: "center" }}
                 textAlign="center"
-                margin="1em 0 0"
-              >
+                margin="1em 0 0">
                 * CONSUMING RAW OR UNDERCOOKED MEATS, POULTRY, SEAFOOD,
                 SHELLFISH OR EGGS MAY INCREASE YOUR RISK OF FOODBORNE ILLNESS,
                 ESPECIALLY IF YOU HAVE CERTAIN MEDICAL CONDITIONS.
@@ -168,52 +167,28 @@ const Home: React.FC<Props> = (props) => {
                 variant="span"
                 displayAlign={{ alignSelf: "center" }}
                 textAlign="center"
-                margin="1em 0 0"
-              >
+                margin="1em 0 0">
                 Menu subject to change
               </Typography.Typography>
             </Layout.Flex>
           </Composed.Menu>
         </Layout.Flex>
 
-        {/* <Layout.Flex
+        <Layout.Flex
           id="cocktails"
           margin="2em 0"
           column
           yAlign="center"
-          xAlign="center"
-        >
-          <Composed.Menu
-            items={store.defaultState.content.menu.drinks}
-          ></Composed.Menu>
-        </Layout.Flex> */}
-        {/* <Typography.Typography
-            color="textTertiary"
-            variant="h3"
-            textAlign="center"
-
-          >
-            Brunch 
-          </Typography.Typography>
-        <Layout.Flex
-          id="brunch"
-          margin="2em 0"
-          column
-          yAlign="center"
-          xAlign="center"
-        >
-          <Editable.MenuDisplay
-            items={store.defaultState.content.menu.brunch}
-          ></Editable.MenuDisplay>
-        </Layout.Flex> */}
+          xAlign="center">
+          <Composed.Menu id="drinks"></Composed.Menu>
+        </Layout.Flex>
 
         <Layout.Flex
           id="gallery"
           margin="2em 0"
           column
           yAlign="center"
-          xAlign="center"
-        >
+          xAlign="center">
           <Editable.ImageDisplay
             layoutConfig={{
               mobile: 50,
@@ -226,8 +201,7 @@ const Home: React.FC<Props> = (props) => {
               dimensionsConfig: {
                 width: "30em",
               },
-            }}
-          ></Editable.ImageDisplay>
+            }}></Editable.ImageDisplay>
         </Layout.Flex>
       </Layout.WindoW>
       <Layout.WindoW id="aboutUs" xAlign="center" yAlign="flex-start" column>
@@ -236,20 +210,17 @@ const Home: React.FC<Props> = (props) => {
             gridGap="1.5em"
             centerMobile
             margin="2.5em 0 "
-            layout={[50, 50]}
-          >
+            layout={[50, 50]}>
             <Content.Image
               boxShadow={true}
               maxWidth="14em"
               width="100%"
-              src="/assets/images/family.jpeg"
-            ></Content.Image>
+              src="/assets/images/family.jpeg"></Content.Image>
             <Typography.Typography
               color="textQuinary"
               variant="p"
               displayAlign={{ alignSelf: "center", justifySelf: "center" }}
-              textAlign="left"
-            >
+              textAlign="left">
               Born in the Carolinas, Lily made her way to Connecticut at a young
               age. Tough as nails, and soft as silk; one would never know the
               hardships she’d endured by the sparkle in her eyes and smile
@@ -264,14 +235,12 @@ const Home: React.FC<Props> = (props) => {
             gridGap="1.5em"
             centerMobile
             margin="2.5em 0 "
-            layout={[40, 60]}
-          >
+            layout={[40, 60]}>
             <Typography.Typography
               color="textQuinary"
               variant="p"
               displayAlign={{ alignSelf: "center", justifySelf: "center" }}
-              textAlign="left"
-            >
+              textAlign="left">
               Chef Michael and Emily Alfeld’s menu is simple, and focused on
               using the freshest ingredients possible. With a love for local
               food, wine, and beer the cuisine highlights the best that
@@ -281,27 +250,23 @@ const Home: React.FC<Props> = (props) => {
               boxShadow={true}
               maxWidth="14em"
               width="100%"
-              src="/assets/images/building.jpeg"
-            ></Content.Image>
+              src="/assets/images/building.jpeg"></Content.Image>
           </Layout.Grid>
           <Layout.Grid
             gridGap="1.5em"
             centerMobile
             margin="2.5em 0 "
-            layout={[50, 50]}
-          >
+            layout={[50, 50]}>
             <Content.Image
               boxShadow={true}
               maxWidth="14em"
               width="100%"
-              src="/assets/images/dining.jpeg"
-            ></Content.Image>
+              src="/assets/images/dining.jpeg"></Content.Image>
             <Typography.Typography
               color="textQuinary"
               variant="p"
               displayAlign={{ alignSelf: "center", justifySelf: "center" }}
-              textAlign="left"
-            >
+              textAlign="left">
               A simple and elegant dining room and bar, along with a beautiful
               wrap around porch, is a quaint and quiet setting in the uniquely
               historical and lively town of Colchester. With a full bar, and
@@ -330,14 +295,12 @@ const Home: React.FC<Props> = (props) => {
           column
           yAlign="center"
           xAlign="center"
-          maxWidth="30em"
-        >
+          maxWidth="30em">
           <Typography.Typography
             color="textTertiary"
             variant="h3"
             textAlign="center"
-            margin="0 0 .5em"
-          >
+            margin="0 0 .5em">
             Dining Guidelines & Dress Code
           </Typography.Typography>
           <Typography.Typography
@@ -345,8 +308,7 @@ const Home: React.FC<Props> = (props) => {
             variant="h5"
             displayAlign={{ alignSelf: "center" }}
             textAlign="center"
-            margin="2em 0 0 0"
-          >
+            margin="2em 0 0 0">
             Dress Code
           </Typography.Typography>
           <Typography.Typography
@@ -354,8 +316,7 @@ const Home: React.FC<Props> = (props) => {
             variant="p"
             displayAlign={{ alignSelf: "center" }}
             textAlign="center"
-            margin="1em 0 0"
-          >
+            margin="1em 0 0">
             Guest attire can elevate or diminish the experience of others. We
             consider tank tops, hats, flip flops, and team athletic attire too
             casual for our restaurants. Our staff takes pride in their
@@ -367,8 +328,7 @@ const Home: React.FC<Props> = (props) => {
             variant="h5"
             displayAlign={{ alignSelf: "center" }}
             textAlign="center"
-            margin="2em 0 0 0"
-          >
+            margin="2em 0 0 0">
             Dinging Guidelines
           </Typography.Typography>
           <Typography.List
@@ -389,11 +349,12 @@ const Home: React.FC<Props> = (props) => {
               "Please notify us of any allergies as the ingredients listed on the menu are abbreviated.        ",
               "To minimize distractions to other guests, please take cell phone conversations out of seated areas, set devices to silent, and limit the use of laptops or tablets.        ",
               "Out of consideration for other guests who are waiting, we may ask for your table if a significant amount of time has passed. We typically never make this request short of 90 minutes after you are seated.      ",
-            ]}
-          ></Typography.List>
+            ]}></Typography.List>
         </Layout.Flex>
       </Layout.WindoW>
     </React.Fragment>
+  ) : (
+    <Fragment></Fragment>
   );
 };
 

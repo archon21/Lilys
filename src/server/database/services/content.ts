@@ -7,7 +7,7 @@ const ContentService = {
 
     // const content = await Content.findOne({ name: page });
     const content = {}
-    // console.log(items);
+  
 
     return response?.send
       ? response.send({ [content.name]: content?.items }).status(200)

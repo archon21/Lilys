@@ -1,4 +1,6 @@
-import { makeAutoObservable } from "mobx";
+import axios from "axios";
+import { makeAutoObservable, toJS } from "mobx";
+import { siteConfig } from "../../site-config";
 import Util from "../util";
 
 const defaultMenu = {
@@ -132,7 +134,7 @@ const defaultMenu = {
         ],
         info: [],
       },
-     
+
       {
         name: "Sunset Salmon*",
         price: 3100,
@@ -579,7 +581,7 @@ const drinkMenu = {
         name: "Brisol",
         description: "brut prosecco",
         price: 4200,
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -588,7 +590,7 @@ const drinkMenu = {
         name: "Da Luca",
         description: "prosecco 187mL.",
         price: 1100,
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -597,7 +599,7 @@ const drinkMenu = {
         name: "Veuve Cliquot",
         description: "champagne",
         price: 8200,
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -606,7 +608,7 @@ const drinkMenu = {
         name: "The Palm",
         description: "rose",
         price: [1100, 4200],
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -615,7 +617,7 @@ const drinkMenu = {
         name: "Toad Hollow",
         description: "chardonnay",
         price: [1000, 3900],
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -624,7 +626,7 @@ const drinkMenu = {
         name: "Landmark Overlook",
         description: "chardonnay",
         price: [1200, 4500],
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -633,7 +635,7 @@ const drinkMenu = {
         name: "Flowers",
         description: "chardonnay",
         price: 8800,
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -642,7 +644,7 @@ const drinkMenu = {
         name: "Epic Run",
         description: "sauvignon blanc",
         price: [900, 3400],
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -651,7 +653,7 @@ const drinkMenu = {
         name: "Mud House",
         description: "sauvignon blanc",
         price: [1100, 4000],
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -660,7 +662,7 @@ const drinkMenu = {
         name: "Torre di Luna",
         description: "pinot grigio",
         price: [800, 3000],
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -669,13 +671,13 @@ const drinkMenu = {
   },
   reds: {
     name: "Reds",
-   
+
     items: [
       {
         name: "Mondavi Private Select",
         description: "cabernet",
         price: [1000, 3900],
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -684,7 +686,7 @@ const drinkMenu = {
         name: "Josh",
         description: "cabernet",
         price: [1200, 4500],
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -693,7 +695,7 @@ const drinkMenu = {
         name: "Justin",
         description: "cabernet",
         price: 6700,
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -702,7 +704,7 @@ const drinkMenu = {
         name: "Stag's Leap Artemis",
         description: "cabernet",
         price: 12500,
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -711,7 +713,7 @@ const drinkMenu = {
         name: "Montpellier",
         description: "pinot noir",
         price: [900, 3400],
-       
+
         unit: "",
         includes: [],
         info: [],
@@ -720,13 +722,33 @@ const drinkMenu = {
         name: "Carletto",
         description: "montepulciano",
         price: [900, 3400],
-       
+
         unit: "",
         includes: [],
         info: [],
       },
     ],
   },
+};
+
+const handlePrice = ({ price }) => {
+  if (typeof price === "string")
+    return [
+      {
+        amount: 0,
+        priceType: "market-price",
+      },
+    ];
+  else if (typeof price === "number") {
+    return [{ amount: price, priceType: "amount" }];
+  } else if (Array.isArray(price)) {
+    return price.map((i) => {
+      return {
+        amount: i,
+        priceType: "amount",
+      };
+    });
+  }
 };
 
 export interface DefaultState {}
@@ -759,6 +781,7 @@ class Store {
           backgroundImage: "/assets/images/lobster.jpeg",
         },
       },
+      menus: {},
       menu: {
         menu: defaultMenu,
         drinks: drinkMenu,
@@ -796,6 +819,7 @@ class Store {
         ],
       },
     },
+    mode: "view",
   };
   action: Request = noAction;
   window = {
@@ -803,22 +827,126 @@ class Store {
     lastScrollY: 0,
     clientWidth: global?.window?.innerWidth || 0,
   };
-  user = { roles: [""] };
+  user: { roles: [string]; mode: "view" | "edit"; token: string } = {
+    roles: [""],
+    mode: "edit",
+    token: "",
+  };
   content = {};
-  mode: 'view' | 'edit' = 'edit'
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  defaultStateHandler() {
+  async defaultStateHandler({ defaultState }) {
+    console.log(defaultState, "d");
+    if (Array.isArray(defaultState?.menus)) {
+      const menus = {};
+      defaultState.menus.forEach((menu) => (menus[menu.name] = menu));
+      defaultState.menus = menus;
+    }
     this.defaultState = defaultStateHandler({
       action: this.action,
-      currentDefaultState: this.defaultState,
+      currentDefaultState: { ...this.defaultState, ...defaultState },
     });
+    console.log("yo", toJS(this.defaultState));
+    // const { data } = await axios.post("/api/menu", {
+    //   menus: [
+    //     {
+    //       name: "drinks",
+    //       displayName: "Drinks",
+    //       sections: Object.values(drinkMenu).map((section) => {
+    //         return {
+    //           name: section.name,
+    //           description: section.description,
+    //           items: section.items.map((item) => {
+    //             const options = item.options
+    //               ? item?.options?.map((option) => {
+    //                   return {
+    //                     name: option.name,
+    //                     price: handlePrice({ price: option.price }),
+    //                     type: "option",
+    //                   };
+    //                 })
+    //               : [];
+
+    //             const adds = item.add
+    //               ? item?.add?.map((option) => {
+    //                   return {
+    //                     name: option.name,
+    //                     price: handlePrice({ price: option.price }),
+    //                     type: "add",
+    //                   };
+    //                 })
+    //               : [];
+    //             const newOptions = [...adds, ...options];
+    //             return {
+    //               name: item.name,
+    //               description: item.description,
+    //               price: handlePrice({ price: item.price }),
+    //               unit: item.unit,
+    //               options: newOptions,
+    //             };
+    //           }),
+    //         };
+    //       }),
+    //     },
+    //   ],
+    // });
 
     this.action = { type: "" };
   }
+
+  async defaultStateGetter({ htmlRouteAccess }) {
+    const htmlRoute = siteConfig.server.htmlRoutes.find(
+      (route) => route.component === htmlRouteAccess
+    );
+
+    const newDefaultState = {};
+    for (let i = 0; i < htmlRoute.methods.length; i++) {
+      let services = htmlRoute.methods[i].services;
+
+      for (let j = 0; j < services.length; j++) {
+        let service = services[j];
+        let { data } = await Util.Request({
+          url: `/api/${service.accessorName.toLowerCase()}`,
+          method: "GET",
+        });
+        newDefaultState[service.stateName] = data;
+      }
+    }
+    await this.defaultStateHandler({ defaultState: newDefaultState });
+  }
+
+  async defaultMenuHandler({ menu }) {
+    if (menu._id) {
+      const res = await Util.Request({
+        method: "PATCH",
+        url: "/api/menu",
+        data: { menus: [menu] },
+      });
+      this.defaultStateGetter({ htmlRouteAccess: "Home" });
+    }
+  }
+
+  async defaultUserHandler({ email, password, history }) {
+    try {
+      const userResponseData = await Util.Request({
+        method: "POST",
+        url: "/api/authentication",
+        data: { email, password },
+      });
+
+      if (userResponseData?.data.mode) {
+        await this.defaultStateHandler({ defaultState: { mode: "edit" } });
+
+        history.push("/");
+      }
+    } catch (err) {
+      alert(err);
+    }
+  }
+
   defaultScrollHandler({ scrollY, lastScrollY }) {
     this.window = { ...this.window, lastScrollY: lastScrollY, scrollY };
   }

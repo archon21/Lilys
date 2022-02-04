@@ -5,7 +5,7 @@ import { siteConfig, Styles } from "../../../site-config";
 
 interface Props {
   layout: Array<number>;
-  gridGap: string;
+  gridGap?: string;
   centerMobile?: boolean;
   children: React.ReactNode;
   formattedLayout?: string;

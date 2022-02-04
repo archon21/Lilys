@@ -1,8 +1,14 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import NumberFormat from "react-number-format";
 
 import { Styles } from "../../../../site-config";
+
+const morph = keyframes`
+   0%{background-position:0 0}
+   100%{background-position:100% 0}
+  
+`;
 
 const WebflowStyle = styled.div`
   position: relative;
@@ -25,17 +31,23 @@ const WebflowStyle = styled.div`
     background-position: 0% 0%;
     background: linear-gradient(
       to right,
-      #b294ff,
-      #57e6e6,
-      #feffb8,
-      #57e6e6,
-      #b294ff,
-      #57e6e6
+      ${Styles.Colors.primary},
+      ${Styles.Colors.primary},
+      ${Styles.Colors.secondary},
+      ${Styles.Colors.secondary},
+      ${Styles.Colors.primary},
+      ${Styles.Colors.primary}
     );
     background-size: 500% auto;
-    animation: gradient 3s linear infinite;
+    animation: ${morph} 5s linear infinite;
   }
 `;
+
+// $input-background: rgba(57, 63, 84, 0.8);
+// $input-text-inactive: #7881A1;
+// $input-text-active: #BFD2FF;
+
+// // gradient animation
 
 const FieldWrapper = styled.div`
   width: 100%;
@@ -65,8 +77,7 @@ const SelectField = styled.select``;
 const NumberField = (props) => (
   <NumberFormat
     {...props}
-    onValueChange={(e) => props.onChange(e)}
-  ></NumberFormat>
+    onValueChange={(e) => props.onChange(e)}></NumberFormat>
 );
 
 const Button = styled.button`
@@ -87,43 +98,25 @@ const Button = styled.button`
 
 const Icon = styled.i``;
 
-// $input-background: rgba(57, 63, 84, 0.8);
-// $input-text-inactive: #7881A1;
-// $input-text-active: #BFD2FF;
-
-// // gradient animation
-// @keyframes gradient {
-//   0%{background-position:0 0}
-//   100%{background-position:100% 0}
-// }
-
 interface FieldProps {
-  type: string;
+  name: string;
   placeholder: string;
-  value: string | number;
   onChange: any;
   fieldType: "text" | "number" | "select";
+  value?: string | number;
+  defaultValue?: string | number;
+  type?: string;
   onBlur?: any;
   options?: string[];
 }
 
-const Field: React.FC<FieldProps> = (props) => {
-  const { type, placeholder, value, options, fieldType, onChange, onBlur } =
-    props;
-
-  const propsToSpread: any = {
-    type,
-    placeholder,
-    value,
-    onChange,
-    onBlur,
-  };
-
-  let InputToRender = () => <TextField {...propsToSpread}></TextField>;
+const FieldRoot = (props) => {
+  const propsToSpread = {...props};
+  const { fieldType } = props;
   if (fieldType === "select") {
-    propsToSpread.options = options;
+    propsToSpread.options = props.options;
 
-    InputToRender = () => <SelectField {...propsToSpread}></SelectField>;
+    return <SelectField {...propsToSpread}></SelectField>;
   } else if (fieldType === "number") {
     propsToSpread.allowNegative = false;
     propsToSpread.allowLeadingZeros = false;
@@ -131,14 +124,52 @@ const Field: React.FC<FieldProps> = (props) => {
     propsToSpread.thousandSeparator = true;
     propsToSpread.decimalScale = 2;
     propsToSpread.fixedDecimalScale = true;
+    propsToSpread.onChange = null;
+    propsToSpread.onValueChange = (values) =>
+      props.onChange({ target: { value: values.floatValue * 100 } });
     propsToSpread.value =
-      typeof value === "number" ? Math.round(value / 100) : value;
-    InputToRender = () => <NumberField {...propsToSpread}></NumberField>;
-  }
+      typeof props.value === "number"
+        ? Math.round(props.value / 100)
+        : props.value;
+    return (
+      <NumberField
+        {...propsToSpread}
+        onChange={(e) => {
+          if (typeof e?.floatValue === "number") {
+            props.onChange({ target: { value: e.floatValue * 100 } });
+          }
+        }}></NumberField>
+    );
+  } else return <TextField {...propsToSpread}></TextField>;
+};
+
+const Field: React.FC<FieldProps> = (props) => {
+  const {
+    type,
+    placeholder,
+    value,
+    defaultValue,
+    options,
+    fieldType,
+    onChange,
+    onBlur,
+    name,
+  } = props;
+
+  const propsToSpread: any = {
+    type,
+    placeholder,
+    value,
+    onChange,
+    onBlur,
+    defaultValue,
+    name,
+  };
+
   return (
     <WebflowStyle>
       <FieldWrapper>
-        <InputToRender></InputToRender>
+        <FieldRoot {...propsToSpread} fieldType={fieldType}></FieldRoot>
       </FieldWrapper>
       {/* <Button type="submit"><Icon ></Icon></Button> */}
     </WebflowStyle>
