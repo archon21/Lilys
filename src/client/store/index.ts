@@ -840,72 +840,72 @@ class Store {
 
   async defaultStateHandler({ defaultState }) {
     console.log(defaultState, "d");
-    // if (Array.isArray(defaultState?.menus)) {
-    //   const menus = {};
-    //   defaultState.menus.forEach((menu) => (menus[menu.name] = menu));
-    //   defaultState.menus = menus;
-    // }
-    // this.defaultState = defaultStateHandler({
-    //   action: this.action,
-    //   currentDefaultState: { ...this.defaultState, ...defaultState },
-    // });
+    if (Array.isArray(defaultState?.menus)) {
+      const menus = {};
+      defaultState.menus.forEach((menu) => (menus[menu.name] = menu));
+      defaultState.menus = menus;
+    }
+    this.defaultState = defaultStateHandler({
+      action: this.action,
+      currentDefaultState: { ...this.defaultState, ...defaultState },
+    });
     console.log("yo", toJS(this.defaultState));
     let items = [{name: 'default', displayName: "Dinner", item: defaultMenu}, {name: 'drinks', displayName: "Drinks", item: drinkMenu}]
     console.log(items, 'FEE');
     
-    for(let i = 0; i < items.length; i++) {
-      let f = items[i]
-      console.log(f, "YU");
-      try {
-        const { data } = await axios.post("/api/menu", {
-          menus: [
-            {
-              name: f.name,
-              displayName: f.displayName,
-              sections: Object.values(f.item).map((section) => {
-                return {
-                  name: section.name,
-                  description: section.description,
-                  items: section.items.map((item) => {
-                    const options = item.options
-                      ? item?.options?.map((option) => {
-                          return {
-                            name: option.name,
-                            price: handlePrice({ price: option.price }),
-                            type: "option",
-                          };
-                        })
-                      : [];
+    // for(let i = 0; i < items.length; i++) {
+    //   let f = items[i]
+    //   console.log(f, "YU");
+    //   try {
+    //     const { data } = await axios.post("/api/menu", {
+    //       menus: [
+    //         {
+    //           name: f.name,
+    //           displayName: f.displayName,
+    //           sections: Object.values(f.item).map((section) => {
+    //             return {
+    //               name: section.name,
+    //               description: section.description,
+    //               items: section.items.map((item) => {
+    //                 const options = item.options
+    //                   ? item?.options?.map((option) => {
+    //                       return {
+    //                         name: option.name,
+    //                         price: handlePrice({ price: option.price }),
+    //                         type: "option",
+    //                       };
+    //                     })
+    //                   : [];
     
-                    const adds = item.add
-                      ? item?.add?.map((option) => {
-                          return {
-                            name: option.name,
-                            price: handlePrice({ price: option.price }),
-                            type: "add",
-                          };
-                        })
-                      : [];
-                    const newOptions = [...adds, ...options];
-                    return {
-                      name: item.name,
-                      description: item.description,
-                      price: handlePrice({ price: item.price }),
-                      unit: item.unit,
-                      options: newOptions,
-                    };
-                  }),
-                };
-              }),
-            },
-          ],
-        });
-      } catch(err) {
-        console.error(err);
+    //                 const adds = item.add
+    //                   ? item?.add?.map((option) => {
+    //                       return {
+    //                         name: option.name,
+    //                         price: handlePrice({ price: option.price }),
+    //                         type: "add",
+    //                       };
+    //                     })
+    //                   : [];
+    //                 const newOptions = [...adds, ...options];
+    //                 return {
+    //                   name: item.name,
+    //                   description: item.description,
+    //                   price: handlePrice({ price: item.price }),
+    //                   unit: item.unit,
+    //                   options: newOptions,
+    //                 };
+    //               }),
+    //             };
+    //           }),
+    //         },
+    //       ],
+    //     });
+    //   } catch(err) {
+    //     console.error(err);
         
-      }
+    //   }
       
-    }
+    // }
 
     
 
