@@ -62,7 +62,7 @@ const Home: React.FC<Props> = (props) => {
           xAlign="center"
           yAlign="flex-start">
           <NavLogo></NavLogo>
-          <Inputs.Field></Inputs.Field>
+        
 
           {store.window.clientWidth >
             siteConfig.client.required.layouts.tablet && (
@@ -331,7 +331,7 @@ const Home: React.FC<Props> = (props) => {
             displayAlign={{ alignSelf: "center" }}
             textAlign="center"
             margin="2em 0 0 0">
-            Dinging Guidelines
+            Dining Guidelines
           </Typography.Typography>
           <Typography.List
             margin="1em 0 0"

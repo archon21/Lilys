@@ -16,7 +16,7 @@ const DesktopMenu: React.FC<Props> = () => {
 
   return (
     <Layout.Flex column>
-      {mode === "edit" ? (
+      {/* {mode === "edit" ? (
         <Layout.Grid layout={[50, 50]}>
           <Layout.Flex yAlign='flex-start'>
             <Inputs.Field >
@@ -26,7 +26,7 @@ const DesktopMenu: React.FC<Props> = () => {
               
           }}>Logout</Buttons.Button>
         </Layout.Grid>
-      ) : <div></div>}
+      ) : <div></div>} */}
       <Layout.Flex yAlign="center" xAlign="center">
         {siteConfig.client.nav.links.map(({ url, text, id }) => {
           return (
