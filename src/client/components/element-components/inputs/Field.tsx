@@ -98,17 +98,7 @@ const Button = styled.button`
 
 const Icon = styled.i``;
 
-interface FieldProps {
-  name: string;
-  placeholder: string;
-  onChange: any;
-  fieldType: "text" | "number" | "select";
-  value?: string | number;
-  defaultValue?: string | number;
-  type?: string;
-  onBlur?: any;
-  options?: string[];
-}
+
 
 const FieldRoot = (props) => {
   const propsToSpread = {...props};
@@ -142,6 +132,18 @@ const FieldRoot = (props) => {
     );
   } else return <TextField {...propsToSpread}></TextField>;
 };
+
+interface FieldProps {
+  name: string;
+  placeholder: string;
+  onChange: any;
+  fieldType: "text" | "number" | "select";
+  value?: string | number;
+  defaultValue?: string | number;
+  type?: string;
+  onBlur?: any;
+  options?: string[];
+}
 
 const Field: React.FC<FieldProps> = (props) => {
   const {

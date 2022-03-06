@@ -18,6 +18,5 @@
     "suppressImplicitAnyIndexErrors": true,
     "noImplicitAny": false,
     "downlevelIteration": true
-    "close"
   }
 }

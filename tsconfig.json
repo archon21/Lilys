@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "jsx": "react"
+    "jsx": "react",
+    "esModuleInterop": true
   },
-  "compilerOptions": {
-    "jsx": "react"
-  },
+
   "extends": "./tsconfig.overrides.json",
   "include": ["./src", "./server"]
 }

@@ -7,7 +7,7 @@ import {
   Typography,
   Content,
   Inputs,
-  Editable,
+  
   Element,
   Composed,
 } from "../components";
@@ -62,6 +62,7 @@ const Home: React.FC<Props> = (props) => {
           xAlign="center"
           yAlign="flex-start">
           <NavLogo></NavLogo>
+          <Inputs.Field></Inputs.Field>
 
           {store.window.clientWidth >
             siteConfig.client.required.layouts.tablet && (
@@ -69,7 +70,7 @@ const Home: React.FC<Props> = (props) => {
               <DesktopMenu></DesktopMenu>
             </Layout.Flex>
           )}
-          {/* <Composed.Text accessor="homeLandingText" page='home'></Composed.Text> */}
+          <Composed.Text accessor="homeLandingText" page='home'></Composed.Text>
           <Typography.Typography
             color="textQuinary"
             variant="h3"
@@ -189,7 +190,7 @@ const Home: React.FC<Props> = (props) => {
           column
           yAlign="center"
           xAlign="center">
-          <Editable.ImageDisplay
+          <Composed.Gallery
             layoutConfig={{
               mobile: 50,
               desktop: 33,
@@ -199,9 +200,10 @@ const Home: React.FC<Props> = (props) => {
               items: store.defaultState.content.gallery.images,
               itemSpacing: "0",
               dimensionsConfig: {
-                width: "30em",
+                maxWidth: "100%",
+                minWidth: '5em'
               },
-            }}></Editable.ImageDisplay>
+            }}></Composed.Gallery>
         </Layout.Flex>
       </Layout.WindoW>
       <Layout.WindoW id="aboutUs" xAlign="center" yAlign="flex-start" column>

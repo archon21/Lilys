@@ -1,7 +1,6 @@
 import React, { Component, Fragment, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocalStore, observer } from "mobx-react";
-import Dropable from "react-draggable";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v1 as uuidv1 } from "uuid";
 

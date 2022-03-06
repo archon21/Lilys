@@ -6,7 +6,7 @@ import { Typography } from "../../typography-components";
 interface ButtonProps {
   children: React.ReactNode;
   type?: 'button' | 'submit';
-  background?: Interfaces.Colors;
+  background?: Types.Colors;
   color?: Types.Colors;
   onClick: any;
   margin?: string;

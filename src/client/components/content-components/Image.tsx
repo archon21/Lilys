@@ -9,6 +9,7 @@ interface Props {
   objectFit?: "cover" | "contain";
   maxWidth?: string;
   height?: string;
+  minWidth: string;
   margin?: string;
   padding?: string;
   displayAlign?: Interfaces.DisplayAlign;
@@ -21,6 +22,7 @@ const Img = styled.img<Props>`
   margin: ${(props) => props.margin || "0"};
   padding: ${(props) => props.padding || "0"};
   object-fit: ${(props) => props.objectFit || "contain"};
+  min-width:  ${(props) => props.minWidth || '1em'};
   box-shadow: ${(props) =>
     props.boxShadow ? Styles.Colors.boxShadow : "none"};
   ${(props) => Styles.Defaults.DisplayAlign({ props })}
